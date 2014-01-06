@@ -1,0 +1,3 @@
+/.vagrant/
+/vagrant_ansible_inventory_vbox_docker
+/vagrant_ansible_inventory_ec2_docker
