@@ -1,8 +1,11 @@
 vagrant up vbox_docker
-docker pull racker/precise-with-updates
+vagrant ssh vbox_docker
+git clone https://github.com/colinsurprenant/devopsmtl-docker.git
+
+docker pull racker/precise-with-updates:latest
 docker images
 
-docker run racker/precise-with-updates echo "hello world"
+docker run -rm racker/precise-with-updates echo "hello world"
 
 # start new container, running bash, create empty t.t file
 docker run -i -t racker/precise-with-updates bash
@@ -35,9 +38,13 @@ docker images
 # build redis images
 docker build -t devopsmtl/redis .
 docker images
-
 # create /docker_data/redis
 sudo mkdir -p /docker_data/redis
+
+# IN app
+
+# build app
+docker build -t devopsmtl/app .
 
 # launch redis
 docker run -d -v /docker_data/redis/:/data/ devopsmtl/redis
@@ -53,8 +60,11 @@ docker logs XXX
 # launch poller
 docker run -t -i -e REDIS_HOST=${REDIS_HOST} devopsmtl/app ruby lib/pull_redis.rb
 
+# show redis data dir
+ls -la /docker_data/redis/
+
 # login to Docker public registry
-docker login devopsmtl
+docker login -u devopsmtl
 
-
+docker push
 

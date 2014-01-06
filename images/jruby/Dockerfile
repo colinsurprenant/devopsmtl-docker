@@ -14,7 +14,7 @@ RUN apt-get update; apt-get upgrade -y; apt-get install -y git-core wget curl bu
 RUN (cd /tmp ; apt-get download fuse; dpkg-deb -x fuse_* .; dpkg-deb -e fuse_*; rm fuse_*.deb; echo -en '#!/bin/bash\nexit 0\n' > DEBIAN/postinst; dpkg-deb -b . /fuse.deb; dpkg -i /fuse.deb)
 
 # install java, ant
-RUN apt-get install -y openjdk-7-jdk ant
+RUN apt-get install -y openjdk-7-jdk ant; apt-get -y clean
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 
 # install rbenv

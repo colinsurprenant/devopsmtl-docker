@@ -1,4 +1,4 @@
-# DevOps Montreal Docker presentation
+# DevOps Montreal Docker Presentation
 
 Docker presentation material for the DevOps Montreal meetup on Jan 6, 2014.
 

@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
     target.vm.box = "veewee-ubuntu-13.04"
 
     target.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", 512]
+      vb.customize ["modifyvm", :id, "--memory", 1024]
     end
 
     target.vm.provision :ansible do |ansible|

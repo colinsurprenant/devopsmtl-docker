@@ -8,6 +8,7 @@
       - sysstat
       - iotop
       - screen
+      - git-core
   tasks:
     - name: update packages
       apt: update_cache=yes
