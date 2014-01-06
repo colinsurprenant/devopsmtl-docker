@@ -1,12 +1,17 @@
-FROM centos
+# Ubuntu 12.04
+# https://journal.paul.querna.org/articles/2013/10/15/docker-ubuntu-on-rackspace/
+FROM racker/precise-with-updates:latest
 
 MAINTAINER Colin Surprenant <colin.surprenant@gmail.com>
 
-RUN rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
-RUN yum -y groupinstall "Development Tools"; yum -y update; yum -y install redis; yum clean all
+# get rid of "debconf: unable to initialize frontend:"
+ENV DEBIAN_FRONTEND noninteractive
+
+# install all packages
+RUN apt-get update; apt-get upgrade -y; apt-get install -y redis-server
 
 WORKDIR /work
 ADD redis.conf /work/redis.conf
 
 EXPOSE 6379
-CMD ["/usr/sbin/redis-server", "/work/redis.conf"]
+CMD ["/usr/bin/redis-server", "/work/redis.conf"]
