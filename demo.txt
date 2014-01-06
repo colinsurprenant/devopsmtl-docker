@@ -1,0 +1,60 @@
+vagrant up vbox_docker
+docker pull racker/precise-with-updates
+docker images
+
+docker run racker/precise-with-updates echo "hello world"
+
+# start new container, running bash, create empty t.t file
+docker run -i -t racker/precise-with-updates bash
+touch t.t
+exit
+
+# retrieve container id
+docker ps -a
+
+# start container, show that t.t is still there
+docker start -a -i XXX
+ls -la
+
+# IN images/jruby
+
+# build jruby images
+docker build -t devopsmtl/jruby:1.7.9 .
+docker images
+
+# tag it latest
+docker tag xxx devopsmtl/jruby:latest
+docker images
+
+# change jruby version to 1.7.8 in Dockerfile and rebuild
+docker build -t devopsmtl/jruby:1.7.8 .
+docker images
+
+# IN images/redis
+
+# build redis images
+docker build -t devopsmtl/redis .
+docker images
+
+# create /docker_data/redis
+sudo mkdir -p /docker_data/redis
+
+# launch redis
+docker run -d -v /docker_data/redis/:/data/ devopsmtl/redis
+
+# set env REDIS_HOST
+./env.sh
+echo $REDIS_HOST
+
+# launch pusher
+docker run -d -e REDIS_HOST=${REDIS_HOST} devopsmtl/app ruby lib/push_redis.rb
+docker logs XXX
+
+# launch poller
+docker run -t -i -e REDIS_HOST=${REDIS_HOST} devopsmtl/app ruby lib/pull_redis.rb
+
+# login to Docker public registry
+docker login devopsmtl
+
+
+

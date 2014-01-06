@@ -1,0 +1,54 @@
+---
+- hosts: all
+  vars:
+    base_deps:
+      - python-pycurl
+      - wget
+      - htop
+      - sysstat
+      - iotop
+      - screen
+  tasks:
+    - name: update packages
+      apt: update_cache=yes
+      sudo: yes
+
+    - name: upgrade packages
+      apt: upgrade=full
+      sudo: yes
+
+    - name: dependencies
+      apt: pkg={{ item }} state=latest
+      with_items: base_deps
+      sudo: yes
+
+    - name: get uname output
+      command: uname -r
+      register: uname_command
+
+    - name: AUFS verification
+      apt: pkg=linux-image-extra-{{ uname_command['stdout'] }} state=latest
+      sudo: yes
+
+    - name: docker repository key
+      apt_key: url=https://get.docker.io/gpg state=present
+      sudo: yes
+
+    - name: docker repository
+      apt_repository: repo='deb http://get.docker.io/ubuntu docker main' state=present
+      sudo: yes
+
+    - name: install docker
+      apt: pkg=lxc-docker state=latest update_cache=yes
+      sudo: yes
+      notify:
+      - restart server
+
+    - name: add ansible user to docker group
+      user: name={{ ansible_user_id }} groups=docker append=yes
+      sudo: yes
+
+  handlers:
+    - name: restart server
+      command: /sbin/reboot
+      sudo: yes
