@@ -63,8 +63,11 @@ docker run -t -i -e REDIS_HOST=${REDIS_HOST} devopsmtl/app ruby lib/pull_redis.r
 # show redis data dir
 ls -la /docker_data/redis/
 
+
+
 # login to Docker public registry
 docker login -u devopsmtl
 
-docker push
+docker push devopsmtl/jruby
+docker push devopsmtl/redis
 
