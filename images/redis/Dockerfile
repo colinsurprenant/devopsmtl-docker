@@ -8,7 +8,7 @@ MAINTAINER Colin Surprenant <colin.surprenant@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 # install all packages
-RUN apt-get update; apt-get upgrade -y; apt-get install -y redis-server
+RUN apt-get -y install redis-server
 
 WORKDIR /work
 ADD redis.conf /work/redis.conf

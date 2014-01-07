@@ -1,3 +1,5 @@
+### live demo commands
+
 vagrant up vbox_docker
 vagrant ssh vbox_docker
 git clone https://github.com/colinsurprenant/devopsmtl-docker.git
@@ -5,6 +7,7 @@ git clone https://github.com/colinsurprenant/devopsmtl-docker.git
 docker pull racker/precise-with-updates:latest
 docker images
 
+# create ephemeral self erasing container
 docker run -rm racker/precise-with-updates echo "hello world"
 
 # start new container, running bash, create empty t.t file
@@ -29,7 +32,7 @@ docker images
 docker tag xxx devopsmtl/jruby:latest
 docker images
 
-# change jruby version to 1.7.8 in Dockerfile and rebuild
+# change jruby version to 1.7.8 in Dockerfile and rebuild to show layering
 docker build -t devopsmtl/jruby:1.7.8 .
 docker images
 
@@ -49,8 +52,8 @@ docker build -t devopsmtl/app .
 # launch redis
 docker run -d -v /docker_data/redis/:/data/ devopsmtl/redis
 
-# set env REDIS_HOST
-./env.sh
+# set env REDIS_HOST using poor man discovery
+source env.sh
 echo $REDIS_HOST
 
 # launch pusher
@@ -63,11 +66,27 @@ docker run -t -i -e REDIS_HOST=${REDIS_HOST} devopsmtl/app ruby lib/pull_redis.r
 # show redis data dir
 ls -la /docker_data/redis/
 
+# push images on repo
 
-
-# login to Docker public registry
-docker login -u devopsmtl
-
+# login to repo, push images
+docker login
 docker push devopsmtl/jruby
 docker push devopsmtl/redis
+docker push devopsmtl/app
+
+
+### run app on ec2 host, you must set ec2 env vars, see Vagrantfile
+
+vagrant up ec2_docker
+vagrant ssh ec2_docker
+git clone https://github.com/colinsurprenant/devopsmtl-docker.git
+
+# login to repo, pull images
+docker login
+
+docker pull devopsmtl/jruby
+docker pull devopsmtl/redis
+docker pull devopsmtl/app
+
+# run everything using previous commands
 
