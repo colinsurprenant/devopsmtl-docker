@@ -1,8 +1,9 @@
 # Ubuntu 12.04
 # https://journal.paul.querna.org/articles/2013/10/15/docker-ubuntu-on-rackspace/
 FROM racker/precise-with-updates:latest
-
 MAINTAINER Colin Surprenant <colin.surprenant@gmail.com>
+
+RUN apt-get -y update
 
 # get rid of "debconf: unable to initialize frontend:"
 ENV DEBIAN_FRONTEND noninteractive
