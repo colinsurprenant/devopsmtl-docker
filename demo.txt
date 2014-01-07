@@ -60,7 +60,7 @@ echo $REDIS_HOST
 docker run -d -e REDIS_HOST=${REDIS_HOST} devopsmtl/app ruby lib/push_redis.rb
 docker logs XXX
 
-# launch poller
+# launch puller
 docker run -t -i -e REDIS_HOST=${REDIS_HOST} devopsmtl/app ruby lib/pull_redis.rb
 
 # show redis data dir
@@ -77,7 +77,7 @@ docker push devopsmtl/app
 
 ### run app on ec2 host, you must set ec2 env vars, see Vagrantfile
 
-vagrant up ec2_docker
+vagrant up ec2_docker --provider=aws
 vagrant ssh ec2_docker
 git clone https://github.com/colinsurprenant/devopsmtl-docker.git
 
